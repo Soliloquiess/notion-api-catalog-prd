@@ -93,14 +93,14 @@
       "name": "Phase 3 — 핵심 기능 (목록·상세 페이지)",
       "description": "Phase 2 공통 기반 위에 카탈로그의 최소 가치인 목록 페이지와 상세 페이지를 만든다(T3.1~T3.3). 서버 컴포넌트에서 데이터를 페칭한다.",
       "notes": "목록 카드 클릭 시 해당 상세로 이동. Notion 파싱은 lib/notion.ts·types/api.ts만 사용(중복 금지).",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "74de77da-5651-4aa6-9269-992d4c0efb5e"
         }
       ],
       "createdAt": "2026-05-27T14:32:16.672Z",
-      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:59:43.680Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -135,7 +135,9 @@
       ],
       "implementationGuide": "1) app/page.tsx: 서버 컴포넌트에서 fetchApis() 결과를 ApiCard 그리드로 표시. 2) app/apis/[id]/page.tsx: fetchApiById(id)로 헤더에 메서드·엔드포인트·상태 뱃지, 본문은 Notion 블록(문단·코드블록·표)→React 렌더링. generateStaticParams로 ID별 정적 생성 가능.",
       "verificationCriteria": "목록에서 카드를 누르면 해당 API 상세로 이동하고, 상세에서 엔드포인트·인증·파라미터·요청/응답 예시를 확인할 수 있다.",
-      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다.",
+      "summary": "Phase 3(핵심) 완료. app/page.tsx: 서버 컴포넌트에서 fetchApis()→ApiCard 그리드, 항목 수 표시 + 빈 상태 안내(키/공유 확인 메시지). app/apis/[id]/page.tsx: Next 16 async params await, fetchApiById로 헤더(MethodBadge/StatusBadge·엔드포인트 code·제공처/인증/카테고리/버전/수정 메타·태그)+본문, null이면 notFound(), generateStaticParams로 목록 ID 정적 생성(키 없으면 [] → 동적 렌더). 본문 렌더러 components/notion-blocks.tsx: RichText(굵게/기울임/취소선/밑줄/인라인코드/링크 주석) + 블록별 렌더(paragraph/heading1~3/code/quote/callout/to_do/toggle/divider/table/image/column_list) + 연속 리스트 항목을 ul/ol로 그룹화, 미지원 블록은 자식만 렌더. 표 렌더 위해 lib/notion.ts fetchBlocks를 has_children 재귀로 보강(BlockWithChildren 타입 추가). 검증: npm run build 통과(라우트 /, /apis/[id] SSG), npm run lint 0 에러, 임시 라우트에 샘플 블록 주입해 dev에서 문단·헤딩·표(thead+셀)·코드블록·ul 리스트 렌더 및 홈 빈 상태 확인 후 임시 라우트 제거·.next 정리 후 재빌드 통과. Caveat: 실제 Notion 데이터로의 목록→상세 이동은 실키 필요로 라이브 미검증(렌더 경로는 더미/샘플로 검증, fetch는 graceful). TASKS.md T3.1~T3.3 완료.",
+      "completedAt": "2026-05-27T14:59:43.672Z"
     },
     {
       "id": "4cf60068-21bc-483a-bb28-34c689748f16",

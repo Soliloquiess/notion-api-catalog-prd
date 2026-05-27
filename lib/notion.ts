@@ -68,9 +68,14 @@ export async function fetchApis(): Promise<ApiItem[]> {
   }
 }
 
+/** 블록 + (있으면) 재귀적으로 조회한 자식 블록. 표/리스트/토글 등 중첩 콘텐츠 렌더링에 사용. */
+export type BlockWithChildren = BlockObjectResponse & {
+  children: BlockWithChildren[];
+};
+
 export interface ApiDetail {
   item: ApiItem;
-  blocks: BlockObjectResponse[];
+  blocks: BlockWithChildren[];
 }
 
 /** 단일 API 상세 + 본문 블록 조회. 없거나 실패하면 null. */
@@ -86,9 +91,9 @@ export async function fetchApiById(id: string): Promise<ApiDetail | null> {
   }
 }
 
-/** 블록 children 전체 조회(페이지네이션 포함). */
-async function fetchBlocks(blockId: string): Promise<BlockObjectResponse[]> {
-  const blocks: BlockObjectResponse[] = [];
+/** 블록 children 전체 조회(페이지네이션 + has_children 재귀). */
+async function fetchBlocks(blockId: string): Promise<BlockWithChildren[]> {
+  const blocks: BlockWithChildren[] = [];
   let cursor: string | undefined;
   do {
     const res = await getClient().blocks.children.list({
@@ -97,7 +102,9 @@ async function fetchBlocks(blockId: string): Promise<BlockObjectResponse[]> {
       page_size: 100,
     });
     for (const block of res.results) {
-      if (isFullBlock(block)) blocks.push(block);
+      if (!isFullBlock(block)) continue;
+      const children = block.has_children ? await fetchBlocks(block.id) : [];
+      blocks.push({ ...block, children });
     }
     cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
   } while (cursor);
