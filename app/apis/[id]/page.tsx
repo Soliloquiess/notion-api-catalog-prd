@@ -7,6 +7,9 @@ import { StatusBadge } from "@/components/status-badge";
 import { NotionBlocks } from "@/components/notion-blocks";
 import { fetchApiById, fetchApis } from "@/lib/notion";
 
+// ISR: 5분마다 재생성. 새 항목은 dynamicParams(기본 true)로 요청 시 생성·캐시.
+export const revalidate = 300;
+
 /** 목록의 ID들로 정적 생성. 키 미설정 시 빈 배열 → 요청 시 동적 렌더(dynamicParams 기본 true). */
 export async function generateStaticParams() {
   const apis = await fetchApis();

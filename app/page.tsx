@@ -1,6 +1,9 @@
 import { ApiCatalog } from "@/components/api-catalog";
 import { fetchApis } from "@/lib/notion";
 
+// ISR: 5분마다 재생성해 Notion 변경을 반영(rate limit 대비 호출 최소화).
+export const revalidate = 300;
+
 export default async function Home() {
   const apis = await fetchApis();
 

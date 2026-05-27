@@ -4,6 +4,9 @@ import { ArrowLeft } from "lucide-react";
 import { ApiCatalog } from "@/components/api-catalog";
 import { fetchApis } from "@/lib/notion";
 
+// ISR: 5분마다 재생성.
+export const revalidate = 300;
+
 /** 데이터에 존재하는 카테고리들로 정적 생성. */
 export async function generateStaticParams() {
   const apis = await fetchApis();

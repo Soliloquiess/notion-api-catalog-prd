@@ -40,8 +40,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:ring-2 focus:ring-ring"
+          >
+            본문 바로가기
+          </a>
           <Header />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+          <main
+            id="main"
+            className="mx-auto w-full max-w-6xl flex-1 px-4 py-8"
+          >
             {children}
           </main>
           <Footer />
