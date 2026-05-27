@@ -1,11 +1,12 @@
 import { ApiCatalog } from "@/components/api-catalog";
-import { fetchApis } from "@/lib/notion";
+import { fetchApis, isSampleMode } from "@/lib/notion";
 
 // ISR: 5분마다 재생성해 Notion 변경을 반영(rate limit 대비 호출 최소화).
 export const revalidate = 300;
 
 export default async function Home() {
   const apis = await fetchApis();
+  const sample = isSampleMode();
 
   return (
     <section className="space-y-6">
@@ -15,6 +16,14 @@ export default async function Home() {
           이름·엔드포인트·태그로 검색하고 카테고리·메서드·상태로 필터링하세요.
         </p>
       </header>
+
+      {sample && (
+        <div className="rounded-lg border border-dashed bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+          🧪 <strong className="font-medium text-foreground">샘플 데이터</strong>{" "}
+          표시 중입니다. <code className="font-mono">.env.local</code> 에 Notion
+          키를 넣으면 실제 데이터로 자동 전환됩니다.
+        </div>
+      )}
 
       {apis.length > 0 ? (
         <ApiCatalog items={apis} />

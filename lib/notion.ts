@@ -4,6 +4,12 @@ import { Client, isFullBlock, isFullPage } from "@notionhq/client";
 import type { BlockObjectResponse } from "@notionhq/client";
 
 import { mapPageToApiItem, type ApiItem } from "@/types/api";
+import { sampleApis, sampleBlocks } from "@/lib/sample-data";
+
+/** NOTION_API_KEY 미설정 시 샘플 데이터(데모) 모드. 키를 넣으면 실제 Notion으로 자동 전환. */
+export function isSampleMode(): boolean {
+  return !process.env.NOTION_API_KEY;
+}
 
 /**
  * Notion 데이터 레이어 — 모든 Notion 호출은 이 파일에 모은다.
@@ -46,6 +52,7 @@ async function getDataSourceId(): Promise<string> {
 
 /** API 목록 조회. 실패 시 빈 배열을 반환해 화면이 깨지지 않게 한다. */
 export async function fetchApis(): Promise<ApiItem[]> {
+  if (isSampleMode()) return sampleApis;
   try {
     const source = await getDataSourceId();
     const items: ApiItem[] = [];
@@ -80,6 +87,10 @@ export interface ApiDetail {
 
 /** 단일 API 상세 + 본문 블록 조회. 없거나 실패하면 null. */
 export async function fetchApiById(id: string): Promise<ApiDetail | null> {
+  if (isSampleMode()) {
+    const item = sampleApis.find((api) => api.id === id);
+    return item ? { item, blocks: sampleBlocks(item) } : null;
+  }
   try {
     const page = await getClient().pages.retrieve({ page_id: id });
     if (!isFullPage(page)) return null;

@@ -42,6 +42,8 @@ NOTION_DATABASE_ID=...    # APIs 데이터베이스 ID
 
 > 🔒 두 값은 **서버 전용**입니다. `lib/notion.ts`는 `server-only`로 보호되며 클라이언트 번들에 포함되지 않습니다. `.env.local`은 커밋하지 않습니다(`.gitignore` 처리됨).
 
+> 🧪 **샘플 모드**: `NOTION_API_KEY`가 없으면 `lib/sample-data.ts`의 데모 데이터로 동작합니다(목록·상세·검색·필터 모두 작동). 키를 넣으면 자동으로 실제 Notion 데이터로 전환됩니다.
+
 ### Notion 준비
 
 1. https://www.notion.so/my-integrations 에서 통합(Integration) 생성 → **시크릿**을 `NOTION_API_KEY`에.
