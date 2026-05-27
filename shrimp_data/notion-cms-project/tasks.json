@@ -1,0 +1,222 @@
+{
+  "tasks": [
+    {
+      "id": "2923d1b3-dd56-4b9d-8e47-d8e44a0ecf25",
+      "name": "Phase 1 — 프로젝트 초기 설정 (골격)",
+      "description": "Next.js 15(App Router)+TypeScript 프로젝트를 생성하고 스타일·아이콘·Notion 클라이언트 환경을 초기화하며 기본 레이아웃을 구성한다(T1.1~T1.4). 견고한 골격이 없으면 이후 모든 작업이 흔들리므로 가장 먼저 고정한다.",
+      "notes": "이 시점부터 npm run dev/build/lint 명령이 생긴다. 키 노출 금지 원칙을 처음부터 준수.",
+      "status": "in_progress",
+      "dependencies": [],
+      "createdAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:33:44.966Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 1 작업/완료 기준"
+        },
+        {
+          "path": "docs/TASKS.md",
+          "type": "REFERENCE",
+          "description": "T1.1~T1.4 체크리스트"
+        },
+        {
+          "path": "package.json",
+          "type": "CREATE",
+          "description": "프로젝트 매니페스트(생성)"
+        },
+        {
+          "path": "app/layout.tsx",
+          "type": "CREATE",
+          "description": "기본 레이아웃(네비/다크모드/푸터)"
+        },
+        {
+          "path": ".env.local",
+          "type": "CREATE",
+          "description": "Notion 키 자리(서버 전용, 비커밋)"
+        }
+      ],
+      "implementationGuide": "1) create-next-app으로 Next.js 15 App Router+TS 프로젝트 생성(루트=저장소). 2) Tailwind CSS 설정, shadcn/ui init, Lucide React 설치. 3) @notionhq/client 설치, .env.local에 NOTION_API_KEY/NOTION_DATABASE_ID 자리 구성(서버 전용), .env*.local이 .gitignore에 포함되는지 확인. 4) app/layout.tsx: 상단 네비(Header)+다크모드 토글+푸터(Footer)+글로벌 스타일. 키는 아직 더미 가능.",
+      "verificationCriteria": "npm run dev로 빈 레이아웃이 뜨고 다크모드 토글이 동작한다. 환경 변수 로딩 구조가 잡혀 있고 .env*.local이 .gitignore 처리되어 있다.",
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+    },
+    {
+      "id": "74de77da-5651-4aa6-9269-992d4c0efb5e",
+      "name": "Phase 2 — 공통 모듈/컴포넌트 (데이터 레이어·타입·UI)",
+      "description": "모든 화면이 공유할 데이터 레이어(lib/notion.ts)·단일 타입 매퍼(types/api.ts)·재사용 공통 컴포넌트를 먼저 구축한다(T2.1~T2.6). 이 단계를 먼저 끝내야 화면마다 Notion 파싱이 중복되지 않고 스키마 변경 시 한 곳만 고친다.",
+      "notes": "PRD 리스크 '스키마 변경으로 매핑 깨짐' 대응의 핵심. 키는 lib/notion.ts(서버)에서만 사용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2923d1b3-dd56-4b9d-8e47-d8e44a0ecf25"
+        }
+      ],
+      "createdAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 2 작업/완료 기준"
+        },
+        {
+          "path": "docs/TASKS.md",
+          "type": "REFERENCE",
+          "description": "T2.1~T2.6 체크리스트"
+        },
+        {
+          "path": "types/api.ts",
+          "type": "CREATE",
+          "description": "ApiItem 타입 + 단일 매퍼"
+        },
+        {
+          "path": "lib/notion.ts",
+          "type": "CREATE",
+          "description": "Notion 조회 함수(fetchApis/fetchApiById)"
+        },
+        {
+          "path": "components",
+          "type": "CREATE",
+          "description": "ApiCard/Badge/SearchInput/FilterSelect/Header/Footer"
+        }
+      ],
+      "implementationGuide": "1) types/api.ts: ApiItem 타입 정의 + Notion 속성(Name/Category/Method/Endpoint/Provider/Auth/Status/Tags/Version/Updated)→ApiItem 단일 매퍼(누락 필드 기본값 처리). 2) lib/notion.ts: Client 초기화, fetchApis()(databases.query 목록), fetchApiById(id)(page+blocks.children.list 상세/본문), 에러·빈값 처리, server-only로 클라이언트 노출 차단. 3) 공통 UI: ApiCard, 메서드·상태용 Badge(색+텍스트 병행=접근성), SearchInput, FilterSelect, Header, Footer + 유틸(메서드 색상/상태 라벨). shadcn/ui Badge·Input·Select를 재사용.",
+      "verificationCriteria": "fetchApis()가 실제 Notion DB에서 항목을 가져와 ApiItem[]로 반환하고, ApiCard에 데이터를 넣으면 카드가 정상 렌더링된다.",
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+    },
+    {
+      "id": "5dc84679-5f6c-47ad-9f56-d1d42f8fc981",
+      "name": "Phase 3 — 핵심 기능 (목록·상세 페이지)",
+      "description": "Phase 2 공통 기반 위에 카탈로그의 최소 가치인 목록 페이지와 상세 페이지를 만든다(T3.1~T3.3). 서버 컴포넌트에서 데이터를 페칭한다.",
+      "notes": "목록 카드 클릭 시 해당 상세로 이동. Notion 파싱은 lib/notion.ts·types/api.ts만 사용(중복 금지).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "74de77da-5651-4aa6-9269-992d4c0efb5e"
+        }
+      ],
+      "createdAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 3 작업/완료 기준"
+        },
+        {
+          "path": "docs/TASKS.md",
+          "type": "REFERENCE",
+          "description": "T3.1~T3.3 체크리스트"
+        },
+        {
+          "path": "app/page.tsx",
+          "type": "CREATE",
+          "description": "API 목록 페이지(카드 그리드)"
+        },
+        {
+          "path": "app/apis/[id]/page.tsx",
+          "type": "CREATE",
+          "description": "API 상세 페이지(블록 렌더링)"
+        },
+        {
+          "path": "lib/notion.ts",
+          "type": "DEPENDENCY",
+          "description": "조회 함수 재사용"
+        },
+        {
+          "path": "types/api.ts",
+          "type": "DEPENDENCY",
+          "description": "ApiItem 타입 재사용"
+        }
+      ],
+      "implementationGuide": "1) app/page.tsx: 서버 컴포넌트에서 fetchApis() 결과를 ApiCard 그리드로 표시. 2) app/apis/[id]/page.tsx: fetchApiById(id)로 헤더에 메서드·엔드포인트·상태 뱃지, 본문은 Notion 블록(문단·코드블록·표)→React 렌더링. generateStaticParams로 ID별 정적 생성 가능.",
+      "verificationCriteria": "목록에서 카드를 누르면 해당 API 상세로 이동하고, 상세에서 엔드포인트·인증·파라미터·요청/응답 예시를 확인할 수 있다.",
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+    },
+    {
+      "id": "4cf60068-21bc-483a-bb28-34c689748f16",
+      "name": "Phase 4 — 추가 기능 (검색·필터·카테고리)",
+      "description": "핵심(목록·상세) 완성 후 탐색성을 높이는 검색·필터·카테고리별 페이지를 추가한다(T4.1~T4.3). Phase 2의 SearchInput/FilterSelect와 동일한 ApiItem 데이터를 클라이언트에서 거른다.",
+      "notes": "추가 Notion 호출 없이 서버에서 받은 데이터로 필터링. 검색·필터 키보드 조작 가능(접근성).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "74de77da-5651-4aa6-9269-992d4c0efb5e"
+        },
+        {
+          "taskId": "5dc84679-5f6c-47ad-9f56-d1d42f8fc981"
+        }
+      ],
+      "createdAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 4 작업/완료 기준"
+        },
+        {
+          "path": "docs/TASKS.md",
+          "type": "REFERENCE",
+          "description": "T4.1~T4.3 체크리스트"
+        },
+        {
+          "path": "app/category/[name]/page.tsx",
+          "type": "CREATE",
+          "description": "카테고리별 페이지"
+        },
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "검색·필터 UI 결합"
+        }
+      ],
+      "implementationGuide": "1) 검색: 클라이언트 컴포넌트에서 ApiItem[]을 받아 이름·엔드포인트·태그 키워드 필터. 2) 필터: 카테고리/HTTP 메서드/상태(운영·베타·지원종료)를 검색과 결합. 3) app/category/[name]/page.tsx: fetchApis() 재사용 후 해당 카테고리만 필터링해 목록 표시.",
+      "verificationCriteria": "키워드 검색과 3종 필터(카테고리/메서드/상태)가 동시에 동작하고, 카테고리 페이지가 해당 카테고리 항목만 표시한다.",
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+    },
+    {
+      "id": "599b1e80-b780-422a-9094-c69eb897fb7d",
+      "name": "Phase 5 — 최적화 및 배포",
+      "description": "기능 완성 후 품질·성능·배포를 다룬다(T5.1~T5.3). ISR로 Notion 변경을 자동 반영하고 반응형·다크모드·접근성을 마감한 뒤 Vercel에 배포한다.",
+      "notes": "완성 전 최적화는 낭비이므로 마지막. 배포 환경 변수는 서버 측에만 주입.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2923d1b3-dd56-4b9d-8e47-d8e44a0ecf25"
+        },
+        {
+          "taskId": "74de77da-5651-4aa6-9269-992d4c0efb5e"
+        },
+        {
+          "taskId": "5dc84679-5f6c-47ad-9f56-d1d42f8fc981"
+        },
+        {
+          "taskId": "4cf60068-21bc-483a-bb28-34c689748f16"
+        }
+      ],
+      "createdAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "relatedFiles": [
+        {
+          "path": "docs/ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 5 작업/완료 기준"
+        },
+        {
+          "path": "docs/TASKS.md",
+          "type": "REFERENCE",
+          "description": "T5.1~T5.3 체크리스트"
+        },
+        {
+          "path": "next.config.js",
+          "type": "TO_MODIFY",
+          "description": "ISR/배포 설정"
+        }
+      ],
+      "implementationGuide": "1) 각 페이지 revalidate(ISR) 설정으로 Notion 변경 자동 반영 + rate limit 대비 캐싱 점검. 2) 반응형/다크모드 마감, 접근성(키보드 조작·텍스트 뱃지 병행) 점검. 3) Vercel 배포 + 환경 변수(NOTION_API_KEY/NOTION_DATABASE_ID) 설정.",
+      "verificationCriteria": "배포된 URL에 접속 가능하고, Notion에 항목을 추가하면 재검증 주기 내 사이트에 반영되며, 모바일에서 레이아웃이 깨지지 않고 다크모드가 동작한다.",
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+    }
+  ]
+}
