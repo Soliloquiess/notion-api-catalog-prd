@@ -23,7 +23,7 @@ Phase 5 최적화/배포 ISR + 반응형/다크모드/접근성 + Vercel 배포
 ## Phase 1 — 프로젝트 초기 설정 (골격) · 약 0.5일
 
 **작업**
-- Next.js 15 (App Router) + TypeScript 프로젝트 생성
+- Next.js 16 (App Router) + TypeScript 프로젝트 생성
 - Tailwind CSS + shadcn/ui + Lucide React 설치/초기화
 - `@notionhq/client` 설치, `.env.local`에 `NOTION_API_KEY`·`NOTION_DATABASE_ID` 자리 구성
 - 기본 레이아웃(`app/layout.tsx`): 상단 네비 + 다크모드 토글 + 푸터, 글로벌 스타일

@@ -8,7 +8,7 @@
 
 ## 기술 스택 (예정)
 
-- **Frontend**: Next.js 15 (App Router) + TypeScript
+- **Frontend**: Next.js 16 (App Router) + TypeScript
 - **CMS**: Notion API (`@notionhq/client`)
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Icons**: Lucide React

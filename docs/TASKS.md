@@ -5,18 +5,18 @@
 > 각 작업은 `[ ]`(예정) / `[~]`(진행중) / `[x]`(완료)로 표시한다.
 
 ## 진행 현황
-- 총 작업: 18개 / 완료 0
-- 현재 단계: Phase 1 시작 전 (기획 PRD·ROADMAP 완료)
+- 총 작업: 18개 / 완료 4
+- 현재 단계: Phase 2 시작 전 (Phase 1 골격 완료)
 
 ---
 
 ## Phase 1 — 프로젝트 초기 설정 (골격)
 선행: 없음
 
-- [ ] **T1.1** Next.js 15 (App Router) + TypeScript 프로젝트 생성
-- [ ] **T1.2** Tailwind CSS + shadcn/ui + Lucide React 설치·초기화
-- [ ] **T1.3** `@notionhq/client` 설치, `.env.local`에 `NOTION_API_KEY`·`NOTION_DATABASE_ID` 구성 (서버 전용)
-- [ ] **T1.4** 기본 레이아웃(`app/layout.tsx`): 상단 네비 + 다크모드 토글 + 푸터
+- [x] **T1.1** Next.js 16 (App Router) + TypeScript 프로젝트 생성
+- [x] **T1.2** Tailwind CSS + shadcn/ui + Lucide React 설치·초기화
+- [x] **T1.3** `@notionhq/client` 설치, `.env.local`에 `NOTION_API_KEY`·`NOTION_DATABASE_ID` 구성 (서버 전용)
+- [x] **T1.4** 기본 레이아웃(`app/layout.tsx`): 상단 네비 + 다크모드 토글 + 푸터
 
 **완료 기준**: `npm run dev`로 빈 레이아웃이 뜨고 다크모드 토글 동작, 환경 변수 로딩 구조 확립
 

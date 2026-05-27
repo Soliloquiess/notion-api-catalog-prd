@@ -35,7 +35,7 @@
 
 | 영역 | 선택 | 비고 |
 |---|---|---|
-| Frontend | Next.js 15 (App Router) + TypeScript | 서버 컴포넌트로 Notion 데이터 페칭 |
+| Frontend | Next.js 16 (App Router) + TypeScript | 서버 컴포넌트로 Notion 데이터 페칭 |
 | CMS | Notion API (`@notionhq/client`) | API 키는 **서버에서만** 사용 |
 | Styling | Tailwind CSS + shadcn/ui | 카드·뱃지·입력 컴포넌트 재사용 |
 | Icons | Lucide React | 메서드/카테고리 아이콘 |
@@ -114,7 +114,7 @@
 
 ## 8. 구현 단계
 
-1. **프로젝트 셋업** — Next.js 15 + TS, Tailwind, shadcn/ui, Lucide, `@notionhq/client` 설치 / `.env.local` 구성
+1. **프로젝트 셋업** — Next.js 16 + TS, Tailwind, shadcn/ui, Lucide, `@notionhq/client` 설치 / `.env.local` 구성
 2. **Notion 준비** — `APIs` 데이터베이스 생성, 통합(Integration) 만들고 DB 공유, `NOTION_API_KEY`·`NOTION_DATABASE_ID` 발급
 3. **데이터 레이어** — `lib/notion.ts`(목록·상세 조회) + `types/api.ts`(Notion 속성 → 앱 타입 매핑)
 4. **목록 페이지** — 카드 컴포넌트 + 검색/필터 (서버에서 데이터, 클라이언트에서 필터링)
