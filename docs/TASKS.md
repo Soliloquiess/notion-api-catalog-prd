@@ -5,8 +5,8 @@
 > 각 작업은 `[ ]`(예정) / `[~]`(진행중) / `[x]`(완료)로 표시한다.
 
 ## 진행 현황
-- 총 작업: 18개 / 완료 4
-- 현재 단계: Phase 2 시작 전 (Phase 1 골격 완료)
+- 총 작업: 18개 / 완료 10
+- 현재 단계: Phase 3 시작 전 (Phase 1 골격 + Phase 2 공통 완료)
 
 ---
 
@@ -26,12 +26,12 @@
 선행: Phase 1
 > 모든 화면이 같은 조회 함수·타입·뱃지를 재사용하므로, 이 단계를 먼저 끝내야 중복이 안 생긴다.
 
-- [ ] **T2.1** `lib/notion.ts`: Notion 클라이언트 초기화 + `fetchApis()`(목록 조회)
-- [ ] **T2.2** `lib/notion.ts`: `fetchApiById(id)`(상세 + 본문 블록 조회), 에러/빈값 처리
-- [ ] **T2.3** `types/api.ts`: Notion 속성(Name/Category/Method/Endpoint/Provider/Auth/Status/Tags/Version/Updated) → `ApiItem` 매핑 함수 (단일 지점)
-- [ ] **T2.4** 공통 UI: `ApiCard`, `Badge`(메서드·상태용)
-- [ ] **T2.5** 공통 UI: `SearchInput`, `FilterSelect`
-- [ ] **T2.6** 공통 UI: `Header`, `Footer` + 공통 유틸(메서드 색상, 상태 라벨)
+- [x] **T2.1** `lib/notion.ts`: Notion 클라이언트 초기화 + `fetchApis()`(목록 조회) — v5 `dataSources.query` 기반
+- [x] **T2.2** `lib/notion.ts`: `fetchApiById(id)`(상세 + 본문 블록 조회), 에러/빈값 처리
+- [x] **T2.3** `types/api.ts`: Notion 속성(Name/Category/Method/Endpoint/Provider/Auth/Status/Tags/Version/Updated) → `ApiItem` 매핑 함수 (단일 지점)
+- [x] **T2.4** 공통 UI: `ApiCard`, `Badge`(메서드·상태용 `MethodBadge`/`StatusBadge`)
+- [x] **T2.5** 공통 UI: `SearchInput`, `FilterSelect`
+- [x] **T2.6** 공통 UI: `Header`, `Footer`(Phase 1) + 공통 유틸 `lib/api-display.ts`(메서드 색상, 상태 라벨)
 
 **완료 기준**: `fetchApis()`가 실제 Notion DB에서 `ApiItem[]` 반환, `ApiCard`에 데이터 넣으면 정상 렌더링
 

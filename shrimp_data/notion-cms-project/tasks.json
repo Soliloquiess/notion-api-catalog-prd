@@ -47,14 +47,14 @@
       "name": "Phase 2 — 공통 모듈/컴포넌트 (데이터 레이어·타입·UI)",
       "description": "모든 화면이 공유할 데이터 레이어(lib/notion.ts)·단일 타입 매퍼(types/api.ts)·재사용 공통 컴포넌트를 먼저 구축한다(T2.1~T2.6). 이 단계를 먼저 끝내야 화면마다 Notion 파싱이 중복되지 않고 스키마 변경 시 한 곳만 고친다.",
       "notes": "PRD 리스크 '스키마 변경으로 매핑 깨짐' 대응의 핵심. 키는 lib/notion.ts(서버)에서만 사용.",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "2923d1b3-dd56-4b9d-8e47-d8e44a0ecf25"
         }
       ],
       "createdAt": "2026-05-27T14:32:16.672Z",
-      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T14:54:15.546Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -84,7 +84,9 @@
       ],
       "implementationGuide": "1) types/api.ts: ApiItem 타입 정의 + Notion 속성(Name/Category/Method/Endpoint/Provider/Auth/Status/Tags/Version/Updated)→ApiItem 단일 매퍼(누락 필드 기본값 처리). 2) lib/notion.ts: Client 초기화, fetchApis()(databases.query 목록), fetchApiById(id)(page+blocks.children.list 상세/본문), 에러·빈값 처리, server-only로 클라이언트 노출 차단. 3) 공통 UI: ApiCard, 메서드·상태용 Badge(색+텍스트 병행=접근성), SearchInput, FilterSelect, Header, Footer + 유틸(메서드 색상/상태 라벨). shadcn/ui Badge·Input·Select를 재사용.",
       "verificationCriteria": "fetchApis()가 실제 Notion DB에서 항목을 가져와 ApiItem[]로 반환하고, ApiCard에 데이터를 넣으면 카드가 정상 렌더링된다.",
-      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다.",
+      "summary": "Phase 2(공통) 완료. types/api.ts: ApiItem 타입 + Notion 페이지→ApiItem 단일 매퍼(title/rich_text/select·status/multi_select/last_edited_time 안전 추출, 누락 필드 기본값 흡수). lib/notion.ts(server-only): Client 싱글톤, NOTION_DATABASE_ID→데이터소스ID 해석·캐시 후 dataSources.query로 fetchApis()(페이지네이션, 실패 시 [] 반환), fetchApiById(id)(pages.retrieve + blocks.children.list 전체, 실패/없음 시 null), env 누락 시 명확한 에러. @notionhq/client v5에서 databases.query가 제거돼 dataSources.query로 구현(env 변수명은 PRD대로 유지). 공통 UI: shadcn badge/input/select/card 추가 후 MethodBadge/StatusBadge(색+텍스트 병행=접근성), SearchInput(제어형), FilterSelect(base-ui Select, 전체 sentinel), ApiCard(상세 링크). lib/api-display.ts(메서드 색상/상태 톤·라벨). 검증: npm run build 전체 TypeScript 통과, npm run lint 0 에러, dev 서버에서 더미 ApiItem으로 ApiCard 렌더 확인(이름·GET 메서드 뱃지·엔드포인트·운영 상태 뱃지·href=/apis/dummy-1 모두 출력)후 page.tsx 원복. Caveat: fetchApis()의 실제 Notion DB 페치는 NOTION_API_KEY/NOTION_DATABASE_ID 실키와 통합 공유가 필요해 라이브 검증은 미수행(키 없으면 [] 반환하도록 graceful 설계). TASKS.md T2.1~T2.6 완료 처리.",
+      "completedAt": "2026-05-27T14:54:15.543Z"
     },
     {
       "id": "5dc84679-5f6c-47ad-9f56-d1d42f8fc981",
