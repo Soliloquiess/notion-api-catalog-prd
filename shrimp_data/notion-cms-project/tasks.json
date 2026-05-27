@@ -144,7 +144,7 @@
       "name": "Phase 4 — 추가 기능 (검색·필터·카테고리)",
       "description": "핵심(목록·상세) 완성 후 탐색성을 높이는 검색·필터·카테고리별 페이지를 추가한다(T4.1~T4.3). Phase 2의 SearchInput/FilterSelect와 동일한 ApiItem 데이터를 클라이언트에서 거른다.",
       "notes": "추가 Notion 호출 없이 서버에서 받은 데이터로 필터링. 검색·필터 키보드 조작 가능(접근성).",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [
         {
           "taskId": "74de77da-5651-4aa6-9269-992d4c0efb5e"
@@ -154,7 +154,7 @@
         }
       ],
       "createdAt": "2026-05-27T14:32:16.672Z",
-      "updatedAt": "2026-05-27T14:32:16.672Z",
+      "updatedAt": "2026-05-27T15:06:12.612Z",
       "relatedFiles": [
         {
           "path": "docs/ROADMAP.md",
@@ -179,7 +179,9 @@
       ],
       "implementationGuide": "1) 검색: 클라이언트 컴포넌트에서 ApiItem[]을 받아 이름·엔드포인트·태그 키워드 필터. 2) 필터: 카테고리/HTTP 메서드/상태(운영·베타·지원종료)를 검색과 결합. 3) app/category/[name]/page.tsx: fetchApis() 재사용 후 해당 카테고리만 필터링해 목록 표시.",
       "verificationCriteria": "키워드 검색과 3종 필터(카테고리/메서드/상태)가 동시에 동작하고, 카테고리 페이지가 해당 카테고리 항목만 표시한다.",
-      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다."
+      "analysisResult": "Notion CMS 기반 \"API 연동 카탈로그\"(Next.js 15 App Router + TypeScript + Tailwind + shadcn/ui + Lucide + @notionhq/client, Vercel/ISR 배포)를 ROADMAP의 \"골격→공통→개별 기능\" 순서로 개발한다. 핵심 아키텍처: 모든 화면(목록·상세·검색·필터·카테고리)이 단일 조회 함수(lib/notion.ts)·단일 타입 매퍼(types/api.ts)를 공유하므로, 공통 데이터 레이어를 화면보다 먼저 만든다. 보안: NOTION_API_KEY/NOTION_DATABASE_ID는 서버 전용, 클라이언트 번들 노출 금지, .env*.local 커밋 금지. 접근성: 색만으로 정보 전달 금지(메서드/상태 텍스트 뱃지 병행). 저장소는 현재 기획 단계(소스/package.json 없음, docs/PRD.md·ROADMAP.md·TASKS.md만 존재). 진행 상태는 docs/TASKS.md의 [ ]/[~]/[x]와 병행 갱신한다.",
+      "summary": "Phase 4(추가) 완료. lib/api-filter.ts: 검색(이름·엔드포인트·태그 부분일치)+카테고리/메서드/상태 정확일치를 결합하는 순수 함수 filterApis + EMPTY_FILTERS. components/api-catalog.tsx(클라이언트): SearchInput + 3종 FilterSelect(옵션은 items에서 고유값 도출·ko 정렬) + 결과 수(aria-live) + ApiCard 그리드 + 빈 상태, useMemo로 filterApis 적용, hideCategoryFilter prop 지원. app/page.tsx: fetchApis→ApiCatalog(데이터 없으면 안내). app/category/[name]/page.tsx: async params decode, fetchApis 재사용 후 category 일치 항목만 서버 필터링→ApiCatalog(hideCategoryFilter), generateStaticParams로 카테고리 정적 생성, 빈 카테고리 안내. 검증: npm run build 통과(라우트 /, /apis/[id], /category/[name] 모두 SSG), npm run lint 0 에러. 필터 로직은 Node 24 type-strip으로 8개 단위 테스트 통과(무필터/카테고리/메서드/상태/엔드포인트검색/태그검색/결합/모순=0). ApiCatalog UI는 임시 라우트+dev 서버로 SSR 렌더 확인(검색창 aria-label, 카테고리·메서드·상태 셀렉트, 카드 2건, 상세 링크) 후 임시 라우트 제거·.next 정리·재빌드 통과. TASKS.md T4.1~T4.3 완료(16/18).",
+      "completedAt": "2026-05-27T15:06:12.607Z"
     },
     {
       "id": "599b1e80-b780-422a-9094-c69eb897fb7d",
