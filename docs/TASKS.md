@@ -5,8 +5,8 @@
 > 각 작업은 `[ ]`(예정) / `[~]`(진행중) / `[x]`(완료)로 표시한다.
 
 ## 진행 현황
-- 총 작업: 18개 / 완료 17, 진행중 1(T5.3 배포 — 사용자 실행 대기)
-- 현재 단계: Phase 5 마무리 (코드 완료, Vercel 배포만 사용자 실행 필요)
+- 총 작업: 18개 / **완료 18** 🎉 (MVP 개발 + 배포 완료)
+- 배포 URL: https://notion-cms-project-eight.vercel.app (샘플 데이터 모드, Notion 키 추가 시 실데이터 전환)
 
 ---
 
@@ -64,7 +64,7 @@
 
 - [x] **T5.1** ISR `revalidate = 300`(5분) 설정 — `/`, `/apis/[id]`, `/category/[name]`. 필터링은 클라이언트라 추가 Notion 호출 없음
 - [x] **T5.2** 반응형/다크모드(next-themes) 마감, 접근성(키보드 조작·텍스트 뱃지 병행·skip link·main 랜드마크)
-- [~] **T5.3** Vercel 배포 — 코드/ISR/환경 변수 구조·README 가이드 준비 완료. **실제 배포는 사용자의 Vercel 인증·실제 Notion 키 필요**(에이전트가 대행 불가)
+- [x] **T5.3** Vercel 배포 완료 → https://notion-cms-project-eight.vercel.app (프로덕션, READY). 환경 변수에 Notion 키 추가 시 실데이터로 전환
 
 **완료 기준**: 배포 URL 접속 가능, Notion 항목 추가 시 재검증 주기 내 반영, 모바일 레이아웃 정상
 
