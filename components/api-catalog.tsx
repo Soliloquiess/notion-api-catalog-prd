@@ -7,6 +7,13 @@ import { ApiCard } from "@/components/api-card";
 import { FilterSelect, type FilterOption } from "@/components/filter-select";
 import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { filterApis } from "@/lib/api-filter";
 import { useFavorites } from "@/lib/use-favorites";
 import { cn } from "@/lib/utils";
@@ -35,6 +42,7 @@ export function ApiCatalog({
   const [method, setMethod] = useState("");
   const [status, setStatus] = useState("");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [sort, setSort] = useState<"name" | "updated">("name");
 
   const { favorites } = useFavorites();
 
@@ -53,10 +61,18 @@ export function ApiCatalog({
 
   const filtered = useMemo(() => {
     const base = filterApis(items, { query, category, method, status });
-    return favoritesOnly
+    const scoped = favoritesOnly
       ? base.filter((item) => favorites.includes(item.id))
       : base;
-  }, [items, query, category, method, status, favoritesOnly, favorites]);
+    const sorted = [...scoped];
+    if (sort === "name") {
+      sorted.sort((a, b) => a.name.localeCompare(b.name, "ko"));
+    } else {
+      // 최근 수정순(내림차순). updated는 ISO 문자열이라 문자열 비교로 정렬 가능.
+      sorted.sort((a, b) => (b.updated ?? "").localeCompare(a.updated ?? ""));
+    }
+    return sorted;
+  }, [items, query, category, method, status, favoritesOnly, favorites, sort]);
 
   return (
     <div className="space-y-4">
@@ -100,6 +116,18 @@ export function ApiCatalog({
             />
             즐겨찾기만
           </Button>
+          <Select
+            value={sort}
+            onValueChange={(v) => setSort(v as "name" | "updated")}
+          >
+            <SelectTrigger aria-label="정렬">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">정렬: 이름순</SelectItem>
+              <SelectItem value="updated">정렬: 최근 수정순</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
