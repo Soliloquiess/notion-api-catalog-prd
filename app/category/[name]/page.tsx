@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -42,7 +43,9 @@ export default async function CategoryPage({
       </header>
 
       {items.length > 0 ? (
-        <ApiCatalog items={items} hideCategoryFilter />
+        <Suspense>
+          <ApiCatalog items={items} hideCategoryFilter />
+        </Suspense>
       ) : (
         <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
           이 카테고리에 해당하는 API가 없습니다.

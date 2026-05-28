@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Star } from "lucide-react";
 
 import { ApiCard } from "@/components/api-card";
@@ -37,14 +38,44 @@ export function ApiCatalog({
   items: ApiItem[];
   hideCategoryFilter?: boolean;
 }) {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("");
-  const [method, setMethod] = useState("");
-  const [status, setStatus] = useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // URL 쿼리에서 초기 상태를 읽는다(lazy init → 효과 없이, 공유된 링크/새로고침 유지).
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
+  const [category, setCategory] = useState(
+    () => searchParams.get("category") ?? "",
+  );
+  const [method, setMethod] = useState(() => searchParams.get("method") ?? "");
+  const [status, setStatus] = useState(() => searchParams.get("status") ?? "");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
-  const [sort, setSort] = useState<"name" | "updated">("name");
+  const [sort, setSort] = useState<"name" | "updated">(() =>
+    searchParams.get("sort") === "updated" ? "updated" : "name",
+  );
 
   const { favorites } = useFavorites();
+
+  // 상태 변경 시 URL 쿼리에 반영(replace로 히스토리 오염 방지). 즐겨찾기는 URL에 넣지 않는다.
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (!hideCategoryFilter && category) params.set("category", category);
+    if (method) params.set("method", method);
+    if (status) params.set("status", status);
+    if (sort !== "name") params.set("sort", sort);
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [
+    query,
+    category,
+    method,
+    status,
+    sort,
+    hideCategoryFilter,
+    pathname,
+    router,
+  ]);
 
   const categoryOptions = useMemo(
     () => toOptions(items.map((i) => i.category)),

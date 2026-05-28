@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { ApiCatalog } from "@/components/api-catalog";
 import { fetchApis, isSampleMode } from "@/lib/notion";
 
@@ -26,7 +28,9 @@ export default async function Home() {
       )}
 
       {apis.length > 0 ? (
-        <ApiCatalog items={apis} />
+        <Suspense>
+          <ApiCatalog items={apis} />
+        </Suspense>
       ) : (
         <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
           Notion 데이터베이스에서 항목을 불러오지 못했습니다.
