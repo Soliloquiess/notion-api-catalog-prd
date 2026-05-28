@@ -1,11 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Star } from "lucide-react";
 
 import { ApiCard } from "@/components/api-card";
 import { FilterSelect, type FilterOption } from "@/components/filter-select";
 import { SearchInput } from "@/components/search-input";
+import { Button } from "@/components/ui/button";
 import { filterApis } from "@/lib/api-filter";
+import { useFavorites } from "@/lib/use-favorites";
+import { cn } from "@/lib/utils";
 import type { ApiItem } from "@/types/api";
 
 /** 고유 값(빈 값 제외)으로 필터 옵션을 만든다. */
@@ -30,6 +34,9 @@ export function ApiCatalog({
   const [category, setCategory] = useState("");
   const [method, setMethod] = useState("");
   const [status, setStatus] = useState("");
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
+
+  const { favorites } = useFavorites();
 
   const categoryOptions = useMemo(
     () => toOptions(items.map((i) => i.category)),
@@ -44,10 +51,12 @@ export function ApiCatalog({
     [items],
   );
 
-  const filtered = useMemo(
-    () => filterApis(items, { query, category, method, status }),
-    [items, query, category, method, status],
-  );
+  const filtered = useMemo(() => {
+    const base = filterApis(items, { query, category, method, status });
+    return favoritesOnly
+      ? base.filter((item) => favorites.includes(item.id))
+      : base;
+  }, [items, query, category, method, status, favoritesOnly, favorites]);
 
   return (
     <div className="space-y-4">
@@ -78,6 +87,19 @@ export function ApiCatalog({
             onChange={setStatus}
             options={statusOptions}
           />
+          <Button
+            type="button"
+            variant={favoritesOnly ? "secondary" : "outline"}
+            size="default"
+            aria-pressed={favoritesOnly}
+            onClick={() => setFavoritesOnly((v) => !v)}
+          >
+            <Star
+              className={cn(favoritesOnly && "fill-yellow-400 text-yellow-400")}
+              aria-hidden
+            />
+            즐겨찾기만
+          </Button>
         </div>
       </div>
 
