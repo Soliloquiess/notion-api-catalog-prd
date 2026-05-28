@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { MethodBadge } from "@/components/method-badge";
 import { StatusBadge } from "@/components/status-badge";
+import { CopyButton } from "@/components/copy-button";
 import { NotionBlocks } from "@/components/notion-blocks";
 import { fetchApiById, fetchApis } from "@/lib/notion";
 
@@ -65,9 +66,12 @@ export default async function ApiDetailPage({
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{item.name}</h1>
         {item.endpoint && (
-          <code className="block w-fit rounded bg-muted px-2 py-1 font-mono text-sm">
-            {item.endpoint}
-          </code>
+          <div className="flex items-center gap-2">
+            <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
+              {item.endpoint}
+            </code>
+            <CopyButton value={item.endpoint} label="엔드포인트 복사" />
+          </div>
         )}
         <dl className="grid gap-1.5 pt-2 sm:grid-cols-2">
           <MetaRow label="제공처" value={item.provider} />
